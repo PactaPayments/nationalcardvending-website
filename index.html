@@ -34,9 +34,11 @@
      bookingUrl:   your cal.com (or Calendly) booking link
      formEndpoint: a Formspree/GoHighLevel endpoint; leave "" for email fallback */
   window.SITE_CONFIG = {
-    bookingUrl: "https://cal.com/jacob-hagman/pokemon-vending-placement-consultation",
-    formEndpoint: "",
-    contactEmail: "jacob@nationalcardvending.com"
+    bookingUrl: "https://cal.com/partner-meeting/national-card-vending-placement-meeting",
+    formEndpoint: "https://formspree.io/f/xkjwvzop",
+    contactEmail: "jacob@nationalcardvending.com",
+    phone: "+17157819207",
+    phoneDisplay: "(715) 781-9207"
   };
 </script>
 
@@ -300,8 +302,15 @@
         <div class="contact-book reveal">
           <h3>Book a 15-minute call</h3>
           <p>Pick a time that works and we'll talk through your location — no commitment.</p>
-          <a href="https://cal.com/jacob-hagman/pokemon-vending-placement-consultation" target="_blank" rel="noopener" class="btn btn--gold btn--lg" data-booking-link>Open the booking calendar <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
+          <a href="https://cal.com/partner-meeting/national-card-vending-placement-meeting" target="_blank" rel="noopener" class="btn btn--gold btn--lg" data-booking-link>Open the booking calendar <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
           <p class="fine">Booking opens in a new tab.</p>
+          <div class="or-call">
+            <span class="or-call__label">Prefer to talk right now?</span>
+            <a href="tel:+17157819207" class="btn btn--outline">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;" aria-hidden="true"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.234 14 14 0 0 0 6.392 6.383Z"/></svg>
+              Call or text (715) 781-9207
+            </a>
+          </div>
         </div>
         <div class="form-panel reveal">
           <h3>Or tell us about your spot</h3>
@@ -367,6 +376,7 @@
         </div>
         <div class="footer__col">
           <h4>Get in touch</h4>
+          <a href="tel:+17157819207">(715) 781-9207</a>
           <a href="mailto:jacob@nationalcardvending.com">jacob@nationalcardvending.com</a>
           <a href="#contact">Host inquiry</a>
         </div>
@@ -379,7 +389,12 @@
 </footer>
 
 <div class="mobile-cta">
-  <a href="#contact" class="btn btn--primary btn--block">Host a machine</a>
+  <div class="mobile-cta__row">
+    <a href="tel:+17157819207" class="btn btn--outline mobile-cta__call" aria-label="Call National Card Vending at (715) 781-9207">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;" aria-hidden="true"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.234 14 14 0 0 0 6.392 6.383Z"/></svg>
+    </a>
+    <a href="#contact" class="btn btn--primary" style="flex:1;">Host a machine</a>
+  </div>
 </div>
 
 <button class="back-to-top" aria-label="Back to top">&uarr;</button>

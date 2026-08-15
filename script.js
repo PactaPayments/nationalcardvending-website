@@ -150,7 +150,10 @@
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify(data)
       })
-        .then(function () { showSuccess(); })
+        .then(function (res) {
+          if (!res.ok) throw new Error("form endpoint returned " + res.status);
+          showSuccess();
+        })
         .catch(function () { fallbackToEmail(data); showSuccess(); });
     } else {
       fallbackToEmail(data);
