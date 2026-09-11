@@ -302,8 +302,16 @@
         <div class="contact-book reveal">
           <h3>Book a 15-minute call</h3>
           <p>Pick a time that works and we'll talk through your location — no commitment.</p>
-          <a href="https://cal.com/partner-meeting/national-card-vending-placement-meeting" target="_blank" rel="noopener" class="btn btn--gold btn--lg" data-booking-link>Open the booking calendar <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
-          <p class="fine">Booking opens in a new tab.</p>
+          <!-- Inline Cal.com embed. Deliberately NOT a link to cal.com: the shared
+               profile at cal.com/partner-meeting publicly lists every other Hagman
+               business (Pacta, 701, JTVend, Factrin, SalesText, VendMath), so sending a
+               prospective host there leaks the whole portfolio. The embed renders only
+               this one event type and the visitor never leaves nationalcardvending.com. -->
+          <div id="ncv-booking" class="cal-embed" role="region" aria-label="Booking calendar"></div>
+          <noscript>
+            <p class="fine">Enable JavaScript to load the calendar, or call <a href="tel:+17157819207">(715) 781-9207</a>.</p>
+          </noscript>
+          <p class="fine">No commitment. Pick any open slot.</p>
           <div class="or-call">
             <span class="or-call__label">Prefer to talk right now?</span>
             <a href="tel:+17157819207" class="btn btn--outline">
@@ -400,5 +408,36 @@
 <button class="back-to-top" aria-label="Back to top">&uarr;</button>
 
 <script src="script.js"></script>
+<script>
+  /* Cal.com inline embed — booking stays on this page. */
+  (function (C, A, L) {
+    var p = function (a, ar) { a.q.push(ar); };
+    var d = C.document;
+    C.Cal = C.Cal || function () {
+      var cal = C.Cal, ar = arguments;
+      if (!cal.loaded) {
+        cal.ns = {}; cal.q = cal.q || [];
+        d.head.appendChild(d.createElement("script")).src = A;
+        cal.loaded = true;
+      }
+      if (ar[0] === L) {
+        var api = function () { p(api, arguments); };
+        var ns = ar[1]; api.q = api.q || [];
+        if (typeof ns === "string") { cal.ns[ns] = cal.ns[ns] || api; p(cal.ns[ns], ar); p(cal, ["initNamespace", ns]); }
+        else p(cal, ar);
+        return;
+      }
+      p(cal, ar);
+    };
+  })(window, "https://app.cal.com/embed/embed.js", "init");
+
+  Cal("init", "ncv", { origin: "https://app.cal.com" });
+  Cal.ns.ncv("inline", {
+    elementOrSelector: "#ncv-booking",
+    calLink: "partner-meeting/national-card-vending-placement-meeting",
+    layout: "month_view"
+  });
+  Cal.ns.ncv("ui", { hideEventTypeDetails: false, layout: "month_view" });
+</script>
 </body>
 </html>
