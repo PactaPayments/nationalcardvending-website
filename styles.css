@@ -668,3 +668,63 @@ p { margin: 0 0 1em; color: var(--text-soft); }
   height:100% !important;    /* beats cal.com's inline height attribute */
 }
 @media (max-width:640px){ .cal-embed{ height:620px; border-radius:12px; } }
+
+/* ---------------- Store locator (/locations) ---------------- */
+.nav__links a[aria-current="page"], .nav__mobile a[aria-current="page"] { color: var(--gold); }
+.loc-hero {
+  position: relative; overflow: hidden;
+  padding: 150px 0 56px;
+  background:
+    radial-gradient(60% 48% at 12% 0%, rgba(43, 107, 255, 0.16), transparent 60%),
+    radial-gradient(42% 38% at 92% 8%, rgba(255, 199, 46, 0.10), transparent 60%),
+    var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.loc-hero__inner { position: relative; }
+.loc-hero__inner > * { max-width: 820px; }
+.loc-hero h1 { font-size: clamp(34px, 5vw, 58px); margin: 18px 0 16px; }
+.loc-hero h1 em { font-style: normal; color: var(--gold); }
+.loc-hero__sub { font-size: 17px; color: var(--text-soft); max-width: 720px; margin: 0 0 26px; }
+.loc-jump { display: flex; flex-wrap: wrap; gap: 8px; }
+.loc-jump a {
+  font-size: 13.5px; font-weight: 500; color: var(--text-soft);
+  padding: 7px 13px; border-radius: 999px;
+  border: 1px solid var(--line-strong); background: rgba(255,255,255,0.03);
+}
+.loc-jump a:hover { color: var(--gold); border-color: var(--gold); }
+.loc-list { padding-top: 56px; }
+.loc-list__title { font-size: clamp(24px, 3vw, 32px); font-weight: 800; color: var(--text); margin: 0 0 22px; }
+.loc-anchor { position: absolute; top: -96px; }
+.loc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.loc-card {
+  position: relative;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md);
+  padding: 22px 22px 20px; display: flex; flex-direction: column;
+  scroll-margin-top: 96px; transition: border-color 0.2s ease;
+}
+.loc-card:hover, .loc-card:target { border-color: rgba(255, 199, 46, 0.45); }
+.loc-card__top { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.loc-card__icon {
+  width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center;
+  background: var(--gold-soft); color: var(--gold); flex: none;
+}
+.loc-card__city { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.loc-card__icon svg { width: 17px; height: 17px; }
+.loc-card__host { font-size: 18px; color: var(--text); margin: 0 0 4px; }
+.loc-card__line { font-size: 13.5px; color: var(--blue-bright); margin: 0 0 12px; }
+.loc-card__addr { font-style: normal; font-size: 15px; line-height: 1.55; color: var(--text-soft); margin-bottom: 16px; }
+.loc-card__dir { margin-top: auto; font-size: 14px; font-weight: 600; color: var(--gold); }
+.loc-card__dir:hover { text-decoration: underline; }
+.loc-faq__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
+.loc-faq h2 { font-size: 22px; color: var(--text); margin: 0 0 10px; }
+.loc-faq p { font-size: 15px; }
+.loc-faq a:not(.btn) { color: var(--gold); }
+@media (max-width: 1020px) {
+  .loc-grid { grid-template-columns: repeat(2, 1fr); }
+  .loc-faq__grid { grid-template-columns: 1fr; gap: 28px; }
+}
+@media (max-width: 700px) {
+  .loc-hero { padding: 118px 0 40px; }
+  .loc-grid { grid-template-columns: 1fr; }
+  .loc-list { padding-top: 40px; }
+}

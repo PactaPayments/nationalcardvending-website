@@ -1,0 +1,21 @@
+[
+  { "host": "7-Eleven", "hostType": "ConvenienceStore", "street": "8360 Broadmoor Rd", "city": "Mentor", "state": "OH", "zip": "44060" },
+  { "host": "Amp'd Arcade", "hostType": "EntertainmentBusiness", "street": "4954 Great Northern Blvd", "city": "North Olmsted", "state": "OH", "zip": "44070" },
+  { "host": "Buehler's Fresh Foods", "hostType": "GroceryStore", "street": "1055 Sugarbush Dr", "city": "Ashland", "state": "OH", "zip": "44805" },
+  { "host": "BP", "hostType": "GasStation", "street": "17810 Bagley Rd", "city": "Berea", "state": "OH", "zip": "44130" },
+  { "host": "Cloud Chaserz", "hostType": "Store", "street": "12120 Madison Ave", "city": "Lakewood", "state": "OH", "zip": "44107" },
+  { "host": "CREPEscape", "hostType": "Restaurant", "street": "26731 Brookpark Ext", "city": "North Olmsted", "state": "OH", "zip": "44070" },
+  { "host": "CREPEscape", "hostType": "Restaurant", "street": "13500 Pearl Rd Suite 121", "city": "Strongsville", "state": "OH", "zip": "44136" },
+  { "host": "Buehler's Fresh Foods", "hostType": "GroceryStore", "street": "3000 N Wooster Ave", "city": "Dover", "state": "OH", "zip": "44622" },
+  { "host": "Elyria Food Mart", "hostType": "ConvenienceStore", "street": "515 Abbe Rd N", "city": "Elyria", "state": "OH", "zip": "44035" },
+  { "host": "Flippin Crepes", "hostType": "Restaurant", "street": "16617 Pearl Rd", "city": "Strongsville", "state": "OH", "zip": "44136" },
+  { "host": "Buehler's Fresh Foods", "hostType": "GroceryStore", "street": "275 Forest Meadows Dr", "city": "Medina", "state": "OH", "zip": "44256" },
+  { "host": "Buehler's Fresh Foods", "hostType": "GroceryStore", "street": "3636 Medina Rd", "city": "Medina", "state": "OH", "zip": "44256" },
+  { "host": "BP", "hostType": "GasStation", "street": "8200 Columbia Rd", "city": "Olmsted Falls", "state": "OH", "zip": "44138" },
+  { "host": "Buehler's Fresh Foods", "hostType": "GroceryStore", "street": "1114 W High St", "city": "Orrville", "state": "OH", "zip": "44667" },
+  { "host": "Speedy's Grub", "hostType": "Restaurant", "street": "7250 Pearl Rd", "city": "Cleveland", "state": "OH", "zip": "44130" },
+  { "host": "Twisted Headz Smokeshop", "hostType": "Store", "street": "7488 Mentor Ave Suite E", "city": "Mentor", "state": "OH", "zip": "44060" },
+  { "host": "Twisted Headz Smokeshop", "hostType": "Store", "street": "6271 Pearl Rd", "city": "Parma Heights", "state": "OH", "zip": "44130" },
+  { "host": "Buehler's Fresh Foods", "hostType": "GroceryStore", "street": "175 Great Oaks Trail", "city": "Wadsworth", "state": "OH", "zip": "44281" },
+  { "host": "Buehler's Fresh Foods", "hostType": "GroceryStore", "street": "3540 Burbank Rd", "city": "Wooster", "state": "OH", "zip": "44691" }
+]
