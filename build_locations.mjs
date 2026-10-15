@@ -14,7 +14,7 @@
  *
  * Run locally: node build_locations.mjs
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -44,7 +44,12 @@ const locs = raw.map((l) => {
   let id = slug(`${l.host} ${l.city}`);
   if (seen[id] > 1) id = slug(`${l.host} ${l.city} ${l.street.split(" ")[0]}`);
   const full = `${l.street}, ${l.city}, ${l.state} ${l.zip}`;
-  return { ...l, id, full, maps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${l.host}, ${full}`)}` };
+  /* Each machine gets its own indexable URL. Google ignores fragments, so a
+     Business Profile listing pointed at /locations#id is, to Google, the same
+     URL as every other listing. cleanUrls serves locations/<id>.html at
+     /locations/<id> with no trailing slash, matching /locations. */
+  const path = `/locations/${id}`;
+  return { ...l, id, full, path, url: `${SITE}${path}`, maps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${l.host}, ${full}`)}` };
 }).sort((a, b) => a.city.localeCompare(b.city) || a.host.localeCompare(b.host) || a.street.localeCompare(b.street));
 
 const cities = [...new Set(locs.map((l) => l.city))];
@@ -63,10 +68,10 @@ const graph = [
   },
   ...locs.map((l) => ({
     "@type": "Store",
-    "@id": `${PAGE_URL}#${l.id}`,
+    "@id": l.url,
     name: "National Card Vending",
     description: `Pokemon card vending machine inside ${l.host} in ${l.city}, ${l.state}. Sealed Pokemon booster packs, graded slabs and sports cards. Cashless, self-serve.`,
-    url: `${PAGE_URL}#${l.id}`,
+    url: l.url,
     telephone: PHONE,
     image: `${SITE}/machine-photo.jpg`,
     priceRange: "$$",
@@ -94,9 +99,10 @@ const cards = `
         return `
         <article class="loc-card" id="${l.id}">${anchor}
           <div class="loc-card__top"><span class="loc-card__icon">${pin}</span><span class="loc-card__city">${esc(l.city)}, ${esc(l.state)}</span></div>
-          <h3 class="loc-card__host">${esc(l.host)}</h3>
+          <h3 class="loc-card__host"><a href="${esc(l.path)}">${esc(l.host)}</a></h3>
           <p class="loc-card__line">Pokemon card vending machine inside ${esc(l.host)}</p>
           <address class="loc-card__addr">${esc(l.street)}<br />${esc(l.city)}, ${esc(l.state)} ${esc(l.zip)}</address>
+          <a class="loc-card__dir" href="${esc(l.path)}">Machine details <span aria-hidden="true">&rarr;</span></a>
           <a class="loc-card__dir" href="${esc(l.maps)}" target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a>
         </article>`;
       }).join("")}
@@ -264,22 +270,130 @@ ${jsonld}
 
 writeFileSync(join(ROOT, "locations.html"), html);
 
-/* ---------- sitemap: keep / and /locations ---------- */
+/* ---------- one page per machine ----------
+   The index and the machine pages share a head, nav and footer, so rather than
+   keep a second copy of that markup in sync by hand, the machine page is the
+   index with its <main> swapped out and its per-page tags rewritten. One
+   template, no drift. */
+const PRE = html.slice(0, html.indexOf("<main id=\"main\">"));
+const POST = html.slice(html.indexOf("</main>") + "</main>".length);
+
+const machinePage = (l) => {
+  const title = `${l.host} Pokemon Card Vending Machine | National Card Vending`;
+  const desc = `Pokemon card vending machine inside ${l.host} at ${l.street}, ${l.city}, ${l.state} ${l.zip}. Sealed Pokemon booster packs, graded slabs and sports cards. Cashless and self-serve.`;
+  const others = locs.filter((o) => o.id !== l.id);
+  const ld = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      org,
+      {
+        "@type": "WebPage", "@id": `${l.url}#webpage`, url: l.url, name: title,
+        isPartOf: { "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: "National Card Vending" },
+        about: { "@id": `${SITE}/#organization` }
+      },
+      {
+        "@type": "Store",
+        "@id": l.url,
+        name: "National Card Vending",
+        description: `Pokemon card vending machine inside ${l.host} in ${l.city}, ${l.state}. Sealed Pokemon booster packs, graded slabs and sports cards. Cashless, self-serve.`,
+        url: l.url,
+        telephone: PHONE,
+        image: `${SITE}/machine-photo.jpg`,
+        priceRange: "$$",
+        paymentAccepted: "Credit card, debit card, Apple Pay, Google Pay",
+        currenciesAccepted: "USD",
+        address: addr(l),
+        hasMap: l.maps,
+        parentOrganization: { "@id": `${SITE}/#organization` },
+        containedInPlace: { "@type": l.hostType || "LocalBusiness", name: l.host, address: addr(l) }
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Locations", item: PAGE_URL },
+          { "@type": "ListItem", position: 2, name: `${l.host}, ${l.city}`, item: l.url }
+        ]
+      }
+    ]
+  }, null, 2).replace(/</g, "\\u003c");
+
+  const body = `<main id="main">
+  <section class="loc-hero">
+    <div class="container">
+      <p class="loc-hero__eyebrow"><a href="/locations">&larr; All ${count} locations</a></p>
+      <h1 class="loc-hero__title">${esc(l.host)}<br />Pokemon card vending machine</h1>
+      <p class="loc-hero__sub">Inside ${esc(l.host)} in ${esc(l.city)}, ${esc(l.state)}. Sealed Pokemon booster packs, graded slabs and sports cards. Card, Apple Pay and Google Pay, no cash needed.</p>
+    </div>
+  </section>
+
+  <section class="loc-list">
+    <div class="container">
+      <div class="loc-grid">
+        <article class="loc-card">
+          <div class="loc-card__top"><span class="loc-card__icon">${pin}</span><span class="loc-card__city">${esc(l.city)}, ${esc(l.state)}</span></div>
+          <h2 class="loc-card__host">${esc(l.host)}</h2>
+          <p class="loc-card__line">Pokemon card vending machine inside ${esc(l.host)}</p>
+          <address class="loc-card__addr">${esc(l.street)}<br />${esc(l.city)}, ${esc(l.state)} ${esc(l.zip)}</address>
+          <p class="loc-card__line">Operated by National Card Vending. Available whenever ${esc(l.host)} is open.</p>
+          <a class="loc-card__dir" href="${esc(l.maps)}" target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a>
+        </article>
+      </div>
+
+      <h2 class="loc-list__title">Other machines nearby</h2>
+      <div class="loc-grid">${others.slice(0, 6).map((o) => `
+        <article class="loc-card">
+          <div class="loc-card__top"><span class="loc-card__icon">${pin}</span><span class="loc-card__city">${esc(o.city)}, ${esc(o.state)}</span></div>
+          <h3 class="loc-card__host"><a href="${esc(o.path)}">${esc(o.host)}</a></h3>
+          <address class="loc-card__addr">${esc(o.street)}<br />${esc(o.city)}, ${esc(o.state)} ${esc(o.zip)}</address>
+          <a class="loc-card__dir" href="${esc(o.path)}">Machine details <span aria-hidden="true">&rarr;</span></a>
+        </article>`).join("")}
+      </div>
+      <p class="loc-hero__sub" style="margin-top:18px"><a href="/locations">See all ${count} machines</a></p>
+    </div>
+  </section>
+</main>`;
+
+  return (PRE + body + POST)
+    .replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`)
+    .replace(/<meta name="description" content="[\s\S]*?" \/>/, `<meta name="description" content="${esc(desc)}" />`)
+    .replace(/<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${l.url}" />`)
+    .replace(/<meta property="og:title" content="[\s\S]*?" \/>/, `<meta property="og:title" content="${esc(title)}" />`)
+    .replace(/<meta property="og:description" content="[\s\S]*?" \/>/, `<meta property="og:description" content="${esc(desc)}" />`)
+    .replace(/<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${l.url}" />`)
+    .replace(/<meta name="twitter:title" content="[\s\S]*?" \/>/, `<meta name="twitter:title" content="${esc(title)}" />`)
+    .replace(/<meta name="twitter:description" content="[\s\S]*?" \/>/, `<meta name="twitter:description" content="${esc(desc)}" />`)
+    .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">\n${ld}\n</script>`);
+};
+
+const DIR = join(ROOT, "locations");
+if (existsSync(DIR)) {
+  /* Drop pages for machines that are no longer in the data, so a removed or
+     renamed machine does not leave an orphan page indexed forever. */
+  const keep = new Set(locs.map((l) => `${l.id}.html`));
+  for (const f of readdirSync(DIR)) if (f.endsWith(".html") && !keep.has(f)) {
+    rmSync(join(DIR, f)); console.log(`removed stale page: locations/${f}`);
+  }
+} else mkdirSync(DIR, { recursive: true });
+for (const l of locs) writeFileSync(join(DIR, `${l.id}.html`), machinePage(l));
+
+/* ---------- sitemap: /, /locations, and every machine ---------- */
 const today = new Date().toISOString().slice(0, 10);
+const urls = [
+  { loc: `${SITE}/`, freq: "monthly", pri: "1.0" },
+  { loc: PAGE_URL, freq: "weekly", pri: "0.9" },
+  ...locs.map((l) => ({ loc: l.url, freq: "monthly", pri: "0.8" }))
+];
 writeFileSync(join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${SITE}/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>${PAGE_URL}</loc>
+${urls.map((u) => `  <url>
+    <loc>${u.loc}</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
+    <changefreq>${u.freq}</changefreq>
+    <priority>${u.pri}</priority>
+  </url>`).join("\n")}
 </urlset>
 `);
 
 console.log(`locations.html: ${count} machines in ${cities.length} cities`);
+console.log(`locations/: ${count} machine pages`);
+for (const l of locs) console.log(`   ${l.path}`);
