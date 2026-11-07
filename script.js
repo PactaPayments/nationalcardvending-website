@@ -130,7 +130,6 @@
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
 
     function showSuccess() {
-      if (window.fbq && !showSuccess.fired) { showSuccess.fired = true; fbq('track', 'Lead'); }
       var wrap = form.closest(".form-panel");
       var success = wrap ? wrap.querySelector(".form-success") : null;
       form.classList.add("is-hidden");
