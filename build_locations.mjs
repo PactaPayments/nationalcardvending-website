@@ -155,25 +155,24 @@ ${jsonld}
       <span class="brand__word">National Card <span>Vending</span></span>
     </a>
     <ul class="nav__links">
-      <li><a href="/#how-it-works">How it works</a></li>
-      <li><a href="/#why-host">Why host</a>
-          <a href="/#chains">Chains</a></li>
-      <li><a href="/#machine">The machine</a></li>
+      <li><a href="/#how">How it works</a></li>
+      <li><a href="/partners">For chains</a></li>
+      <li><a href="/partners#hardware">The machine</a></li>
       <li><a href="/locations" aria-current="page">Locations</a></li>
       <li><a href="/#faq">FAQ</a></li>
     </ul>
     <div class="nav__cta">
-      <a href="/#contact" class="btn btn--primary btn--sm">Host a machine</a>
+      <a href="/#host" class="btn btn--primary btn--sm">Host a machine</a>
       <button type="button" class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMobile" id="navToggle"><span aria-hidden="true"></span></button>
     </div>
   </div>
   <div class="nav__mobile" id="navMobile">
-    <a href="/#how-it-works">How it works</a>
-    <a href="/#why-host">Why host</a>
-    <a href="/#machine">The machine</a>
+    <a href="/#how">How it works</a>
+    <a href="/partners">For chains</a>
+    <a href="/partners#hardware">The machine</a>
     <a href="/locations" aria-current="page">Locations</a>
     <a href="/#faq">FAQ</a>
-    <a href="/#contact" class="btn btn--primary" style="margin-top:20px;">Host a machine</a>
+    <a href="/#host" class="btn btn--primary" style="margin-top:20px;">Host a machine</a>
   </div>
 </nav>
 
@@ -212,7 +211,7 @@ ${jsonld}
         <p class="eyebrow">Own a business?</p>
         <h2>Want a machine in yours?</h2>
         <p>We place, stock and service it at no cost to you, and you earn on every sale.</p>
-        <a href="/#contact" class="btn btn--gold">Host a machine <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
+        <a href="/#host" class="btn btn--gold">Host a machine <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
       </div>
     </div>
   </section>
@@ -232,9 +231,9 @@ ${jsonld}
       <div class="footer__cols">
         <div class="footer__col">
           <h4>Site</h4>
-          <a href="/#how-it-works">How it works</a>
-          <a href="/#why-host">Why host</a>
-          <a href="/#machine">The machine</a>
+          <a href="/#how">How it works</a>
+          <a href="/partners">For chains</a>
+          <a href="/partners#hardware">The machine</a>
           <a href="/locations">Locations</a>
           <a href="/#faq">FAQ</a>
         </div>
@@ -242,7 +241,7 @@ ${jsonld}
           <h4>Get in touch</h4>
           <a href="tel:${PHONE}">${PHONE_DISPLAY}</a>
           <a href="mailto:jacob@nationalcardvending.com">jacob@nationalcardvending.com</a>
-          <a href="/#contact">Host inquiry</a>
+          <a href="/#host">Host inquiry</a>
         </div>
       </div>
     </div>
@@ -257,7 +256,7 @@ ${jsonld}
     <a href="tel:${PHONE}" class="btn btn--outline mobile-cta__call" aria-label="Call National Card Vending at ${PHONE_DISPLAY}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;" aria-hidden="true"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.234 14 14 0 0 0 6.392 6.383Z"/></svg>
     </a>
-    <a href="/#contact" class="btn btn--primary" style="flex:1;">Host a machine</a>
+    <a href="/#host" class="btn btn--primary" style="flex:1;">Host a machine</a>
   </div>
 </div>
 
@@ -381,6 +380,7 @@ const today = new Date().toISOString().slice(0, 10);
 const urls = [
   { loc: `${SITE}/`, freq: "monthly", pri: "1.0" },
   { loc: PAGE_URL, freq: "weekly", pri: "0.9" },
+  { loc: `${SITE}/partners`, freq: "monthly", pri: "0.9" },
   ...locs.map((l) => ({ loc: l.url, freq: "monthly", pri: "0.8" }))
 ];
 writeFileSync(join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
